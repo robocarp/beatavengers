@@ -32,20 +32,10 @@ window.onload = function() {
 
     var fpb = Math.round(game.fps/(bpm/60));
 
-<<<<<<< HEAD
     /*game.rootScene.addEventListener('touchstart', function(e) {
         var ea = new enchant.Event("startSong");
         game.rootScene.dispatchEvent(ea);
     });*/
-
-=======
-/*
-    game.rootScene.addEventListener('touchstart', function(e) {
-        var ea = new enchant.Event("startSong");
-        game.rootScene.dispatchEvent(ea);
-    });
-*/
->>>>>>> faca9ebd1f57b6eb14b53ffbdf7189ecf65e5712
     game.onload = function(){
         var arrows = new ArrowBase(60,300);
         var lastFrame;
