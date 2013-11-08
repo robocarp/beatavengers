@@ -12,14 +12,14 @@ var Console = enchant.Class.create(enchant.Scene,{
         game.preload(preLoadFiles());
         game.scale = 2;
         game.fps = fps;
-        game.bpm = 85;
+        game.bpm = 135;
     }
 });
 var scwidget;
 window.onload = function() {
     var game = new Core(694, 366);
     var test = new Console()
-    var bpm = 85;
+    var bpm = 140;
     scwidget = new SoundCloudHandler('https://soundcloud.com/strangetalkmusic/picking-up-all-the-pieces-ta');
 
     var fps = 30;
@@ -27,7 +27,6 @@ window.onload = function() {
     game.fps = fps;
 
     var arrowsPerScreen = 9;
-    var bpm = 128;
 
 
     var fpb = Math.round(game.fps/(bpm/60));

@@ -36,7 +36,7 @@ SoundCloudHandler.prototype = {
         var _this = this;
         this.widget.bind(SC.Widget.Events.READY, function() {
             _this.widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(o) {
-                if (o.currentPosition > 50){
+                if (o.currentPosition > 1){
                     console.log('Hearing music now');
                     _this.publishSongStarted();
                     _this.widget.unbind(SC.Widget.Events.PLAY_PROGRESS);
