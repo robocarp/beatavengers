@@ -38,7 +38,7 @@ SoundCloudHandler.prototype = {
             _this.widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(o) {
                 if (o.currentPosition > 50){
                     console.log('Hearing music now');
-                    _this.setSongStarted();
+                    _this.publishSongStarted();
                     _this.widget.unbind(SC.Widget.Events.PLAY_PROGRESS);
                 }
             });
@@ -48,8 +48,10 @@ SoundCloudHandler.prototype = {
                     _this.loadSongInfo(currentSound);
                 });
             });
+            var e = new enchant.Event("songReady");
+            var game = enchant.Core.instance;
+            game.rootScene.dispatchEvent(e);
 
-            _this.widget.play();
         });
     },
     getWidget: function(){
@@ -60,13 +62,18 @@ SoundCloudHandler.prototype = {
     },
     loadSongInfo:function(currentSound){
         this.song = currentSound;
+        //@TODO coverart, title, artist, song length
     },
     loadRandomUrl: function(){
 
     },
-    setSongStarted: function(){
-        var e = new enchant.Event("startsong");
-        this.target.dispatchEvent(e);
+    startSong: function(){
+        this.widget.play();
+    },
+    publishSongStarted: function(){
+        var e = new enchant.Event("startSong");
+        var game = enchant.Core.instance;
+        game.rootScene.dispatchEvent(e);
         console.log('startsong event fired');
     }
 
