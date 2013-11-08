@@ -2,7 +2,7 @@
  * Created by hessj on 11/3/13.
  */
 enchant();
-var arrowsPerScreen = 9
+var arrowsPerScreen = 9;
 var fps = 60;
 var songStart = false;
 
