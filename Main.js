@@ -20,7 +20,7 @@ window.onload = function() {
     var game = new Core(694, 366);
     var test = new Console()
     var bpm = 140;
-    scwidget = new SoundCloudHandler('https://soundcloud.com/strangetalkmusic/picking-up-all-the-pieces-ta');
+    scwidget = new SoundCloudHandler('https://soundcloud.com/darkbydesign-official/the-monster-beat-dbd-135bpm');
 
     var fps = 30;
     game.scale = 2;
