@@ -5,7 +5,7 @@ enchant();
 var arrowsPerScreen = 9;
 var fps = 60;
 var songStart = false;
-
+var startDelay = 2 * fps;
 var Console = enchant.Class.create(enchant.Scene,{
     initialize: function(bpm){
         var game = enchant.Core.instance;
@@ -20,7 +20,7 @@ window.onload = function() {
     var game = new Core(694, 366);
     var test = new Console()
     var bpm = 85;
-    scwidget = new SoundCloudHandler('https://soundcloud.com/sunraw/another-s-raw-remix-22-bonus');
+    scwidget = new SoundCloudHandler('https://soundcloud.com/strangetalkmusic/picking-up-all-the-pieces-ta');
 
     var fps = 30;
     game.scale = 2;
@@ -31,13 +31,21 @@ window.onload = function() {
 
 
     var fpb = Math.round(game.fps/(bpm/60));
-    var startDelay = 2 * fps;
 
+<<<<<<< HEAD
     /*game.rootScene.addEventListener('touchstart', function(e) {
         var ea = new enchant.Event("startSong");
         game.rootScene.dispatchEvent(ea);
     });*/
 
+=======
+/*
+    game.rootScene.addEventListener('touchstart', function(e) {
+        var ea = new enchant.Event("startSong");
+        game.rootScene.dispatchEvent(ea);
+    });
+*/
+>>>>>>> faca9ebd1f57b6eb14b53ffbdf7189ecf65e5712
     game.onload = function(){
         var arrows = new ArrowBase(60,300);
         var lastFrame;
@@ -53,6 +61,9 @@ window.onload = function() {
 
         game.rootScene.backgroundColor = '#080808';
         game.addEventListener("enterframe", function(){
+            if(game.frame == startDelay){
+                scwidget.startSong();
+            }
             if(game.frame > 1){
                 var e = new enchant.Event("BeatHit");
                 var nextBeat = game.frame % fpb;
@@ -74,8 +85,10 @@ window.onload = function() {
             };
         });
         game.rootScene.addEventListener('startSong',function(){
-            new beginText();
             songStart = true;
+        });
+        game.rootScene.addEventListener('songReady',function(){
+                beginText();
         });
     };
     game.start();
@@ -193,9 +206,9 @@ window.onload = function() {
                 if(this.age == 60){
                   this.frame = 1;
                   this.opacity = 0;
-                  this.tl.fadeIn(5).fadeOut(7).fadeIn(7).fadeOut(5);
+                  this.tl.fadeIn(5).fadeOut(7).fadeIn(7).fadeOut(10);
                 };
-                if(this.age >= 90){
+                if(this.age >= 95){
                     game.rootScene.removeChild(this);
                 }
             });
