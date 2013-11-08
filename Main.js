@@ -2,7 +2,6 @@
  * Created by hessj on 11/3/13.
  */
 enchant();
-<<<<<<< HEAD
 var arrowsPerScreen = 9
 var fps = 60;
 var songStart = false;
@@ -16,16 +15,11 @@ var Console = enchant.Class.create(enchant.Scene,{
         game.bpm = 85;
     }
 });
-=======
-var preLoadList = new Array();
 var scwidget;
->>>>>>> 9daf7194b5e602dfd9030008a199303f518a5b2f
 window.onload = function() {
     var game = new Core(694, 366);
-<<<<<<< HEAD
     var test = new Console()
     var bpm = 85;
-=======
     scwidget = new SoundCloudHandler('https://soundcloud.com/sunraw/another-s-raw-remix-22-bonus');
 
     var fps = 30;
@@ -35,7 +29,6 @@ window.onload = function() {
 
     var arrowsPerScreen = 9;
     var bpm = 128;
->>>>>>> 9daf7194b5e602dfd9030008a199303f518a5b2f
     var fpb = Math.round(game.fps/(bpm/60));
     var startDelay = 2 * fps;
 
