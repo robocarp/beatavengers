@@ -39,15 +39,6 @@ window.onload = function() {
         var arrows = new ArrowBase(60,300);
         var lastFrame;
 
-        var songTitle = new Label();
-        songTitle.font = "13px Helvetica";
-
-        songTitle.color = "#f8b800";
-        songTitle.x = 280;
-        songTitle.y = 20;
-
-        game.rootScene.addChild(songTitle);
-
         game.rootScene.backgroundColor = '#080808';
         game.addEventListener("enterframe", function(){
             if(game.frame == startDelay){
@@ -78,6 +69,15 @@ window.onload = function() {
         });
         game.rootScene.addEventListener('songReady',function(){
                 beginText();
+        });
+        game.rootScene.addEventListener('songInfoLoaded',function(){
+            var songTitle = new Label();
+            songTitle.font = "13px Helvetica";
+            songTitle.text = scwidget.getSongTitle();
+            songTitle.color = "#f8b800";
+            songTitle.x = 280;
+            songTitle.y = 20;
+            game.rootScene.addChild(songTitle);
         });
     };
     game.start();

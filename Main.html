@@ -8,6 +8,14 @@
 <body>
 <script type="text/javascript" src="build/enchant.js"></script>
 <script type="text/javascript" src="https://w.soundcloud.com/player/api.js"></script>
+<script src="http://connect.soundcloud.com/sdk.js"></script>
+<script>
+    SC.initialize({
+        client_id: 'c2d3c45d52e3eed35d2b1512080c6f6f',
+        redirect_uri: 'http://localhost:63342/beatavengers/Main.html'
+    });
+    SC.connect();
+</script>
 <script type="text/javascript" src="SoundCloudHandler.js"></script>
 <script type="text/javascript" src="Main.js"></script>
 </body>

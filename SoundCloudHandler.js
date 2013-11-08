@@ -8,6 +8,7 @@ function SoundCloudHandler(url){
     this.target = new enchant.EventTarget();
     this.init();
 }
+
 SoundCloudHandler.prototype = {
     init: function() {
         this.widgetId = 'sc-widget';
@@ -15,6 +16,7 @@ SoundCloudHandler.prototype = {
         this.initEvents();
     },
     initComponent: function(){
+
         var body = document.getElementsByTagName('body') [0];
         var fullUrl = 'https://w.soundcloud.com/player/?url=' + this.url;
         if(body && !document.getElementById(this.widgetId)){
@@ -46,6 +48,7 @@ SoundCloudHandler.prototype = {
                 _this.widget.getCurrentSound(function(currentSound) {
                     console.log('played' + currentSound.title);
                     _this.loadSongInfo(currentSound);
+                    _this.publishSongInfoLoaded();
                 });
             });
             var e = new enchant.Event("songReady");
@@ -62,19 +65,36 @@ SoundCloudHandler.prototype = {
     },
     loadSongInfo:function(currentSound){
         this.song = currentSound;
+
         //@TODO coverart, title, artist, song length
     },
+    getSongTitle: function() { if(this.song){ return this.song.title } else { return "" } },
+    getSongArtist: function() { if(this.song){
+
+        return this.song.user_id
+
+    } else { return "" } },
+    getSongLength: function() { if(this.song){ return this.song.title } else { return "" } },
     loadRandomUrl: function(){
 
     },
     startSong: function(){
         this.widget.play();
     },
+    publishToEnchant: function(){
+
+    },
     publishSongStarted: function(){
         var e = new enchant.Event("startSong");
         var game = enchant.Core.instance;
         game.rootScene.dispatchEvent(e);
         console.log('startsong event fired');
+    },
+    publishSongInfoLoaded: function(){
+        var e = new enchant.Event("songInfoLoaded");
+        var game = enchant.Core.instance;
+        game.rootScene.dispatchEvent(e);
+        console.log('songinfoloaded event fired');
     }
 
 
