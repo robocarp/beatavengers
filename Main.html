@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>MusicRPG</title>
+    <title>BeatAvengers</title>
     <link href="gameStyle.css" rel="stylesheet" type="text/css" />
 
 </head>
@@ -15,6 +15,14 @@
         redirect_uri: 'http://localhost:63342/beatavengers/Main.html'
     });
     SC.connect();
+</script>
+<script src="node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.min.js"></script>
+<script>
+    var socket = io.connect('http://127.0.0.1:8080');
+    socket.on('news', function (data) {
+        console.log(data);
+        socket.emit('my other event', { my: 'data' });
+    });
 </script>
 <script type="text/javascript" src="SoundCloudHandler.js"></script>
 <script type="text/javascript" src="Main.js"></script>
