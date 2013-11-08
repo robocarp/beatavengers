@@ -79,6 +79,9 @@ window.onload = function() {
             songTitle.y = 20;
             game.rootScene.addChild(songTitle);
         });
+        game.rootScene.addEventListener(Event.DOWN_BUTTON_DOWN, function(){
+            game.assets["sound/hit2.mp3"].clone().play();
+        });
     };
     game.start();
 
@@ -185,7 +188,7 @@ window.onload = function() {
             this.image = game.assets["img/battleText.png"];
             this.frame = 0;
             this.x = 92;
-            this.y = 150; //@TODO
+            this.y = 150;
             this.opacity = 0;
             game.rootScene.addChild(this);
             this.addEventListener("enterframe",function(){
@@ -224,5 +227,6 @@ function preLoadFiles(){
     fileList.push("img/ArrowGlow.png");
     fileList.push("img/Arrow.png");
     fileList.push("img/battleText.png");
+    fileList.push("sound/hit2.mp3");
     return(fileList);
 };
