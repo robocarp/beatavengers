@@ -3,10 +3,12 @@
  */
 enchant();
 var preLoadList = new Array();
-
+var scwidget;
 window.onload = function() {
     preLoadFiles();
     var game = new Core(694, 366);
+    scwidget = new SoundCloudHandler('https://soundcloud.com/sunraw/another-s-raw-remix-22-bonus');
+
     var fps = 30;
     game.preload(preLoadList);
     game.scale = 2;
