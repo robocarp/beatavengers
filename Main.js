@@ -16,7 +16,6 @@ var Console = enchant.Class.create(enchant.Scene,{
     }
 });
 var scwidget;
-
 window.onload = function() {
     var game = new Core(694, 366);
     var test = new Console()
@@ -30,6 +29,7 @@ window.onload = function() {
 
     var arrowsPerScreen = 9;
     var bpm = 128;
+
 
     var fpb = Math.round(game.fps/(bpm/60));
     var startDelay = 2 * fps;
