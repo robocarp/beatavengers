@@ -23,7 +23,6 @@ window.onload = function() {
     scwidget = new SoundCloudHandler('https://soundcloud.com/sunraw/another-s-raw-remix-22-bonus');
 
     var fps = 30;
-    game.preload(preLoadList);
     game.scale = 2;
     game.fps = fps;
 
@@ -34,10 +33,10 @@ window.onload = function() {
     var fpb = Math.round(game.fps/(bpm/60));
     var startDelay = 2 * fps;
 
-    game.rootScene.addEventListener('touchstart', function(e) {
+    /*game.rootScene.addEventListener('touchstart', function(e) {
         var ea = new enchant.Event("startSong");
         game.rootScene.dispatchEvent(ea);
-    });
+    });*/
 
     game.onload = function(){
         var arrows = new ArrowBase(60,300);
