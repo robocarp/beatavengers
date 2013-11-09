@@ -6,41 +6,37 @@ var arrowsPerScreen = 9;
 var fps = 60;
 var songStart = false;
 var startDelay = 2 * fps;
+var arrowStartDelay = 49.5; //Frames
+var arrowStart = false;
+var scwidget;
+
 var Console = enchant.Class.create(enchant.Scene,{
     initialize: function(bpm){
         var game = enchant.Core.instance;
         game.preload(preLoadFiles());
         game.scale = 2;
         game.fps = fps;
-        game.bpm = 135;
+        game.bpm = 140;
+
     }
 });
-var scwidget;
+
 window.onload = function() {
     var game = new Core(694, 366);
-    var test = new Console()
-    var bpm = 140;
+    var test = new Console();
+    var bpm = game.bpm;
     scwidget = new SoundCloudHandler('https://soundcloud.com/strangetalkmusic/picking-up-all-the-pieces-ta');
 
-    var fps = 30;
-    game.scale = 2;
-    game.fps = fps;
-
-    var arrowsPerScreen = 9;
-
-
-    var fpb = Math.round(game.fps/(bpm/60));
-
-    /*game.rootScene.addEventListener('touchstart', function(e) {
-        var ea = new enchant.Event("startSong");
-        game.rootScene.dispatchEvent(ea);
-    });*/
     game.onload = function(){
+        this.arrowStart = null;
+
         var arrows = new ArrowBase(60,300);
         var lastFrame;
-
+        var fpb = Math.round(game.fps/(game.bpm/60));
         game.rootScene.backgroundColor = '#080808';
+
         game.addEventListener("enterframe", function(){
+
             if(game.frame == startDelay){
                 scwidget.startSong();
             }
@@ -56,20 +52,27 @@ window.onload = function() {
                 }
                 game.rootScene.dispatchEvent(e);
                 lastFrame = game.frame;
-            };
-            // BEAT......
-            if(game.frame > startDelay && nextBeat == 0){};
-            if(nextBeat == 0 && songStart){
-                var arrowPose = Math.floor((Math.random()*4)+1);
-                var beatarrow = new beatArrow(arrowPose);
-            };
+            }
+            if(arrowStart && game.frame == arrowStartDelay){
+                //*********BEAT**********\\
+                setInterval(function(){
+                    game.assets['sound/hit2.mp3'].clone().play();
+                    var arrowPose = Math.floor((Math.random()*4)+1);
+                    var beatarrow = new beatArrow(arrowPose);
+                },1000/game.bpm*60);
+            }
         });
         game.rootScene.addEventListener('startSong',function(){
             songStart = true;
+            //arrowStart = true;
         });
+
         game.rootScene.addEventListener('songReady',function(){
-                beginText();
+            beginText();
+            arrowStart = true;
+            arrowStartDelay += game.frame + arrowStartDelay;
         });
+
         game.rootScene.addEventListener('songInfoLoaded',function(){
             var songTitle = new Label();
             songTitle.font = "13px Helvetica";
@@ -114,7 +117,7 @@ window.onload = function() {
                 }
             });
         }
-    })
+    });
 
     var beatArrow = enchant.Class.create(enchant.Sprite,{
         initialize: function(arrowPose){
@@ -123,31 +126,34 @@ window.onload = function() {
             if(arrowPose == 1){
                 this.arrow.rotation = -90;
                 this.arrow.x=56;
-            };
+            }
             if(arrowPose == 2){
                 this.arrow.rotation = -180;
                 this.arrow.x=96;
-            };
+            }
             if(arrowPose == 3){
                 this.arrow.rotation = 0;
                 this.arrow.x=136;
-            };
+            }
             if(arrowPose == 4){
                 this.arrow.rotation = 90;
                 this.arrow.x=176;
-            };
+            }
             this.arrow.opacity=0;
             game.rootScene.addChild(this.arrow);
+            var _this = this;
             this.arrow.addEventListener("enterframe",function(){
                 if(this.age == 1){
                     this.opacity = 0;
-                    this.tl.setFrameBased();
-                    this.fpb = Math.round(game.fps/(bpm/60)*arrowsPerScreen)
-                    this.tl.moveTo(this.x,350,this.fpb).and().fadeIn(30);
-                };
-                if(Math.round(this.y) == 350){
+                    this.tl.setTimeBased();         // Set Time Based.
+                    this.fpb = (1000/game.bpm*60*9)-1040;  // Time Based
+                    //this.fpb = (game.fps/(game.bpm/60)*9)-60.65;
+                    this.tl.moveTo(this.x,296,this.fpb).and().fadeIn(30);
+                }
+                if(Math.round(this.y) == 296){
+                  game.assets['sound/hit2.mp3'].clone().play();
                   game.rootScene.removeChild(this);
-                };
+                }
             });
         }
     });
@@ -174,7 +180,7 @@ window.onload = function() {
                     this.startFrame += 1;
                     if(this.startFrame > 5){
                         this.startFrame =0;
-                    };
+                    }
                 }
             });
 
@@ -193,13 +199,14 @@ window.onload = function() {
             game.rootScene.addChild(this);
             this.addEventListener("enterframe",function(){
                 if(this.age < 60){
-                    this.tl.fadeIn(30).fadeOut(30).then(function(){this.opacity=0;});
-                };
+                    var _this = this;
+                    this.tl.fadeIn(30).fadeOut(30).then(function(){_this.opacity=0;});
+                }
                 if(this.age == 60){
                   this.frame = 1;
                   this.opacity = 0;
                   this.tl.fadeIn(5).fadeOut(7).fadeIn(7).fadeOut(10);
-                };
+                }
                 if(this.age >= 95){
                     game.rootScene.removeChild(this);
                 }
@@ -223,10 +230,10 @@ window.onload = function() {
 
 
 function preLoadFiles(){
-    var fileList = new Array();
+    var fileList = [];
     fileList.push("img/ArrowGlow.png");
     fileList.push("img/Arrow.png");
     fileList.push("img/battleText.png");
     fileList.push("sound/hit2.mp3");
     return(fileList);
-};
+}
