@@ -23,9 +23,12 @@ var Console = enchant.Class.create(enchant.Scene,{
 
 window.onload = function() {
     var game = new Core(694, 366);
-    var test = new Console();
+
     var bpm = game.bpm;
-    scwidget = new SoundCloudHandler('https://soundcloud.com/strangetalkmusic/picking-up-all-the-pieces-ta');
+    var test = new Console();
+    var bpm = 135;
+    scwidget = new SoundCloudHandler('https://soundcloud.com/darkbydesign-official/the-monster-beat-dbd-135bpm');
+
 
     game.onload = function(){
         this.arrowStart = null;
