@@ -20,17 +20,45 @@ app.use(express.bodyParser()); //Tells server to support JSON, urlencoded, and m
 /* Server routing */
 
 //Handle route "GET /", as in "http://localhost:8080/"
+/*
 app.get("/", function(request, response) {
     response.send("Server is up and running");
 });
+*/
+
+function GameLoop(){
+    this._interval = 1000;
+    this._timer = null;
+}
+GameLoop.prototype = {
+    init: function(){
+        this._timer = setInterval(this._tick, this._interval);
+    },
+    _tick: function(){
+        io.sockets.in('test').emit('news', {'server_time':Date.now(),'room_name':'test'});
+        console.log('ticking');
+    }
+
+}
+
+var gloop = new GameLoop();
+gloop.init();
+
 
 io.sockets.on('connection', function (socket) {
-    socket.emit('news', { hello: 'world' });
-    console.log('got here');
+    //socket.emit('news', { hello: 'world' });
+    //console.log('got here');
+    socket.join('test');
+
+    /*
     socket.on('my other event', function (data) {
         console.log(data);
     });
+    */
+
 });
+
+
 
 //Start the http server at port and IP defined before
 http.listen(app.get("port"), app.get("ipaddr"), function() {
