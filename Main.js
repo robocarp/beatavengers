@@ -59,7 +59,7 @@ window.onload = function() {
             if(arrowStart && game.frame == arrowStartDelay){
                 //*********BEAT**********\\
                 setInterval(function(){
-                    game.assets['sound/hit2.mp3'].clone().play();
+                    //game.assets['sound/hit2.mp3'].clone().play();
                     var arrowPose = Math.floor((Math.random()*4)+1);
                     var beatarrow = new beatArrow(arrowPose);
                 },1000/game.bpm*60/2);
@@ -154,7 +154,7 @@ window.onload = function() {
                     this.tl.moveTo(this.x,296,this.fpb).and().fadeIn(30);
                 }
                 if(Math.round(this.y) == 296){
-                  game.assets['sound/hit2.mp3'].clone().play();
+                  //game.assets['sound/hit2.mp3'].clone().play();
                   game.rootScene.removeChild(this);
                 }
             });
