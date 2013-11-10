@@ -62,7 +62,7 @@ window.onload = function() {
                     game.assets['sound/hit2.mp3'].clone().play();
                     var arrowPose = Math.floor((Math.random()*4)+1);
                     var beatarrow = new beatArrow(arrowPose);
-                },1000/game.bpm*60);
+                },1000/game.bpm*60/2);
             }
         });
         game.rootScene.addEventListener('startSong',function(){
