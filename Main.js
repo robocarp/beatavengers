@@ -9,31 +9,44 @@ var startDelay = 2 * fps;
 var arrowStartDelay = 49.5; //Frames
 var arrowStart = false;
 var scwidget;
+var IMG_CONSOLE_BG = "img/consoleBg.png";
+var IMG_CONSOLE_ARROWS = "img/consoleArrows.png";
+var POS_ARROW_UP = 1;
+var POS_ARROW_DOWN = 2;
+var POS_ARROW_LEFT = 0;
+var POS_ARROW_RIGHT = 3;
+var ARROW_GLOW_OFFSET = 28;
+var UP_STATE = false;
+var DOWN_STATE = false;
+var LEFT_STATE = false;
+var RIGHT_STATE = false;
 
-var Console = enchant.Class.create(enchant.Scene,{
+var init_Game = enchant.Class.create(enchant.Scene,{
     initialize: function(bpm){
-        var game = enchant.Core.instance;
+        var game = new Core(1388, 732);
+        game.rootScene.backgroundColor = "#f00";
         game.preload(preLoadFiles());
-        game.scale = 2;
         game.fps = fps;
-        game.bpm = 140;
-
+        game.bpm = 135;
     }
 });
 
 window.onload = function() {
-    var game = new Core(694, 366);
-
-    var bpm = game.bpm;
-    var test = new Console();
-    var bpm = 135;
+    init_Game();
+    var game = enchant.Core.instance;
     scwidget = new SoundCloudHandler('https://soundcloud.com/darkbydesign-official/the-monster-beat-dbd-135bpm');
-
 
     game.onload = function(){
         this.arrowStart = null;
+        var local_Console = new console(30,0, 'local');
+        var remote_Console = new console(600,0, 'remote');
+        game.rootScene.addChild(remote_Console);
+        game.rootScene.addChild(local_Console);
 
-        var arrows = new ArrowBase(60,300);
+
+
+
+
         var lastFrame;
         var fpb = Math.round(game.fps/(game.bpm/60));
         game.rootScene.backgroundColor = '#080808';
@@ -59,10 +72,10 @@ window.onload = function() {
             if(arrowStart && game.frame == arrowStartDelay){
                 //*********BEAT**********\\
                 setInterval(function(){
-                    //game.assets['sound/hit2.mp3'].clone().play();
+                    game.assets['sound/hit2.mp3'].clone().play();
                     var arrowPose = Math.floor((Math.random()*4)+1);
                     var beatarrow = new beatArrow(arrowPose);
-                },1000/game.bpm*60/2);
+                },1000/game.bpm*60);
             }
         });
         game.rootScene.addEventListener('startSong',function(){
@@ -91,37 +104,98 @@ window.onload = function() {
     };
     game.start();
 
+
+// +------------------------------+
+// |      CONSOLE CLASS           |
+// +------------------------------+
+    var console = enchant.Class.create(enchant.Sprite,{
+        initialize: function(x,y, name){
+            this.name = name;
+            var _this = this;
+            enchant.Sprite.call(this,362,732);
+            var game = enchant.Core.instance;
+            var img_background = new enchant.Sprite(362,732);
+            img_background.x = x;
+            img_background.y = y;
+            img_background.image = game.assets[IMG_CONSOLE_BG];
+            game.rootScene.addChild(img_background);
+            this.arrowBase = new ArrowBase(x - ARROW_GLOW_OFFSET,592+ y - ARROW_GLOW_OFFSET,game);
+            new Local_Player_Input(this);
+           //game.pushScene(this);
+        }
+    });
 // ---------  Base Arrows Class---------- \\
     var ArrowBase = enchant.Class.create(enchant.Sprite,{
-        initialize: function(x, y){
-            var ArrowUp    = new arrow01(140, 300);
-            var ArrowDown  = new arrow01(100, 300);
-            var ArrowLeft  = new arrow01(60 , 300);
-            var ArrowRight = new arrow01(180, 300);
-            ArrowUp.rotate(0);
-            ArrowDown.rotate(180);
-            ArrowLeft.rotate(-90);
-            ArrowRight.rotate(90);
-            game.rootScene.addChild(ArrowUp);
-            game.rootScene.addChild(ArrowDown);
-            game.rootScene.addChild(ArrowLeft);
-            game.rootScene.addChild(ArrowRight);
-            game.rootScene.addEventListener('BeatHit',function(){
-                if(game.beatHit == true){
-                    ArrowUp.frame    =  2;
-                    ArrowDown.frame  =  2;
-                    ArrowLeft.frame  =  2;
-                    ArrowRight.frame =  2;
-                }else{
-                    ArrowUp.frame    =  1;
-                    ArrowDown.frame  =  1;
-                    ArrowLeft.frame  =  1;
-                    ArrowRight.frame =  1;
-                }
-            });
+        initialize: function(x, y, game){
+            var game = enchant.Core.instance;
+            this.ArrowUp    = new arrow01(x + 111 , y , POS_ARROW_UP);
+            this.ArrowDown  = new arrow01(x + 194 , y , POS_ARROW_DOWN);
+            this.ArrowLeft  = new arrow01(x + 26  , y , POS_ARROW_LEFT);
+            this.ArrowRight = new arrow01(x + 278 , y , POS_ARROW_RIGHT);
+
+            game.rootScene.addChild(this.ArrowUp);
+            game.rootScene.addChild(this.ArrowDown);
+            game.rootScene.addChild(this.ArrowLeft);
+            game.rootScene.addChild(this.ArrowRight);
+
         }
     });
 
+    var Local_Player_Input = function(ConsoleClass){
+        // BUTTON UP
+        var game = enchant.Core.instance;
+        ConsoleClass.addEventListener(Event.UP_BUTTON_DOWN, function(){
+            if(!UP_STATE){
+                UP_STATE = true;
+                ConsoleClass.arrowBase.ArrowUp.tl.fadeIn(3);
+            }
+        });
+        ConsoleClass.addEventListener(Event.UP_BUTTON_UP, function(){
+            if(UP_STATE){
+                UP_STATE = false;
+                ConsoleClass.arrowBase.ArrowUp.tl.fadeOut(3);
+            }
+        });
+        //BUTTON DOWN
+        ConsoleClass.addEventListener(Event.DOWN_BUTTON_DOWN, function(){
+            if(!DOWN_STATE){
+                DOWN_STATE = true;
+                ConsoleClass.arrowBase.ArrowDown.tl.fadeIn(3);
+            }
+        });
+        ConsoleClass.addEventListener(Event.DOWN_BUTTON_UP, function(){
+            if(DOWN_STATE){
+                DOWN_STATE = false;
+                ConsoleClass.arrowBase.ArrowDown.tl.fadeOut(3);
+            }
+        });
+        //BUTTON LEFT
+        ConsoleClass.addEventListener(Event.LEFT_BUTTON_DOWN, function(){
+            if(!LEFT_STATE){
+                LEFT_STATE = true;
+                ConsoleClass.arrowBase.ArrowLeft.tl.fadeIn(3);
+            }
+        });
+        ConsoleClass.addEventListener(Event.LEFT_BUTTON_UP, function(){
+            if(LEFT_STATE){
+                LEFT_STATE = false;
+                ConsoleClass.arrowBase.ArrowLeft.tl.fadeOut(3);
+            }
+        });
+        //BUTTON Right
+        ConsoleClass.addEventListener(Event.RIGHT_BUTTON_DOWN, function(){
+            if(!RIGHT_STATE){
+                RIGHT_STATE = true;
+                ConsoleClass.arrowBase.ArrowRight.tl.fadeIn(3);
+            }
+        });
+        ConsoleClass.addEventListener(Event.RIGHT_BUTTON_UP, function(){
+            if(RIGHT_STATE){
+                RIGHT_STATE = false;
+                ConsoleClass.arrowBase.ArrowRight.tl.fadeOut(3);
+            }
+        });
+    };
     var beatArrow = enchant.Class.create(enchant.Sprite,{
         initialize: function(arrowPose){
             enchant.Sprite.call(this,35 ,35);
@@ -166,9 +240,9 @@ window.onload = function() {
         initialize: function(arrowPose){
             this.startFrame = 1;
             enchant.Sprite.call(this,35 ,35);
-            this.image =       game.assets["img/ArrowGlow.png"];
+            //this.image =       game.assets["img/ArrowGlow.png"]; @TODO
             this.fader = new Sprite(35,35);
-            this.fader.image=  game.assets["img/ArrowGlow.png"];
+            //this.fader.image=  game.assets["img/ArrowGlow.png"]; @TODO
             this.fader.frame = 1;
             this.tl.setFrameBased();
             this.fader.tl.setFrameBased();
@@ -194,7 +268,7 @@ window.onload = function() {
     var beginText = enchant.Class.create(enchant.Sprite,{
         initialize: function(){
             enchant.Sprite.call(this,83 ,41);
-            this.image = game.assets["img/battleText.png"];
+            //this.image = game.assets["img/battleText.png"]; @TODO
             this.frame = 0;
             this.x = 92;
             this.y = 150;
@@ -218,13 +292,13 @@ window.onload = function() {
     });
 
     var arrow01 = enchant.Class.create(enchant.Sprite,{
-        initialize: function(x, y){
-            enchant.Sprite.call(this,27 ,27);
-            this.image =    game.assets["img/Arrow.png"];
+        initialize: function(x,y,position){
+            enchant.Sprite.call(this,114 ,114);
+            this.image = game.assets[IMG_CONSOLE_ARROWS];
+            this.frame = position;
             this.x =        x;
             this.y =        y;
-            //this.frameState =   1;
-            this.frame = 1;       //this.frameState;
+            this.opacity =  0;
         }
 
     });
@@ -234,9 +308,10 @@ window.onload = function() {
 
 function preLoadFiles(){
     var fileList = [];
-    fileList.push("img/ArrowGlow.png");
-    fileList.push("img/Arrow.png");
-    fileList.push("img/battleText.png");
-    fileList.push("sound/hit2.mp3");
+    fileList.push(IMG_CONSOLE_BG);
+    fileList.push(IMG_CONSOLE_ARROWS);
+    //fileList.push("img/Arrow.png");
+    //fileList.push("img/battleText.png");
+    //fileList.push("sound/hit2.mp3");
     return(fileList);
 }
