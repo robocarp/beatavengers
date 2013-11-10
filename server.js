@@ -50,6 +50,10 @@ app.get('/hello.txt', function(req, res){
     res.end(body);
 });
 
+app.get('/testing',function(req, res){
+    res.sendfile('Main.html');
+});
+
 var port = process.env.PORT || 8080;
 app.listen(port, function() {
     console.log("Listening on " + port);
