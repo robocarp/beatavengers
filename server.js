@@ -11,10 +11,16 @@ var express = require("express")
     , app = express()
     , http = require("http").createServer(app)
     , io = require("socket.io").listen(http);
+app.set("port",8080);
+app.set("ipaddr","localhost");
 
 app.get('/hello.txt', function(req, res){
     var body = 'Hello World';
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('Content-Length', body.length);
     res.end(body);
+});
+
+http.listen(app.get("port"), app.get("ipaddr"), function() {
+    console.log("Server up and running. Go to http://" + app.get("ipaddr") + ":" + app.get("port"));
 });
