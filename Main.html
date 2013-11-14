@@ -19,7 +19,7 @@
     */
 </script>
 <script src="node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.min.js"></script>
-<script>
+<!--<script>
     var socket = io.connect('http://192.168.1.3:8080');
     socket.on('news', function (data) {
         console.log(data);
@@ -29,8 +29,9 @@
         console.log(data + ' === Localtime:' + Date.now());
         // socket.emit('my other event', { my: 'data' });
     });
-</script>
+</script>-->
 <script type="text/javascript" src="SoundCloudHandler.js"></script>
+<script type="text/javascript" src="game_classes.js"></script>
 <script type="text/javascript" src="Main.js"></script>
 </body>
 </html>
