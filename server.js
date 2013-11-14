@@ -12,20 +12,6 @@ var express = require("express")
     , http = require("http").createServer(app)
     , io = require("socket.io").listen(http);
 
-/* Server config */
-app.set("ipaddr", "127.0.0.1");
-app.set("port", 8080);
-app.use(express.bodyParser()); //Tells server to support JSON, urlencoded, and multipart requests
-
-/* Server routing */
-
-//Handle route "GET /", as in "http://localhost:8080/"
-/*
-app.get("/", function(request, response) {
-    response.send("Server is up and running");
-});
-*/
-
 function GameLoop(){
     this._interval = 1000;
     this._timer = null;
@@ -44,23 +30,31 @@ GameLoop.prototype = {
 var gloop = new GameLoop();
 gloop.init();
 
-
 io.sockets.on('connection', function (socket) {
     //socket.emit('news', { hello: 'world' });
     //console.log('got here');
     socket.join('test');
 
     /*
-    socket.on('my other event', function (data) {
-        console.log(data);
-    });
-    */
+     socket.on('my other event', function (data) {
+     console.log(data);
+     });
+     */
 
 });
 
+app.get('/hello.txt', function(req, res){
+    var body = 'Hello World';
+    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Content-Length', body.length);
+    res.end(body);
+});
 
+app.get('/testing',function(req, res){
+    res.sendfile('Main.html');
+});
 
-//Start the http server at port and IP defined before
-http.listen(app.get("port"), app.get("ipaddr"), function() {
-    console.log("Server up and running. Go to http://" + app.get("ipaddr") + ":" + app.get("port"));
+var port = process.env.PORT || 8080;
+app.listen(port, function() {
+    console.log("Listening on " + port);
 });
